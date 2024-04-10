@@ -1,10 +1,11 @@
 import {FC, useEffect, useState} from 'react';
 import {Button, FlatList, Text, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {Routes} from '../routes/Routes.ts';
+import {useNavigation} from '@react-navigation/native';
+import { UserScreenNavigationProp } from "../routes/types.ts";
 
 const Users: FC = () => {
-  const {navigate} = useNavigation<any>();
+  const {navigate} = useNavigation<UserScreenNavigationProp>();
   const [users, setUsers] = useState<any[]>();
 
   useEffect(() => {
@@ -13,8 +14,8 @@ const Users: FC = () => {
       .then(value => setUsers(value));
   }, []);
 
-  const handleNavigate = (userId: string) =>
-    navigate(Routes.USER_POSTS, {userId});
+  const handleNavigate = (userId: string, username: string) =>
+    navigate(Routes.USER_POSTS, {userId, username});
 
   return (
     <View>
@@ -24,7 +25,8 @@ const Users: FC = () => {
           data={users}
           renderItem={({item}) => (
             <View>
-              <TouchableOpacity onPress={() => handleNavigate(item.id)}>
+              <TouchableOpacity
+                onPress={() => handleNavigate(item.id, item.username)}>
                 <Text>
                   {item.id}. {item.name}
                 </Text>
